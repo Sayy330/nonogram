@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nonogram Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        #nonogram {
+            display: grid;
+            grid-template-columns: repeat(5, 40px);
+            grid-template-rows: repeat(5, 40px);
+            gap: 2px;
+            justify-content: center;
+            margin: 20px auto;
+        }
+
+        .cell {
+            width: 40px;
+            height: 40px;
+            background-color: #eee;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .cell.filled {
+            background-color: #333;
+        }
+
+        #checkButton {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        #checkButton:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nonogram</h1>
+
+    <div id="nonogram"></div>
+
+    <button id="checkButton">Check Puzzle</button>
+
+    <script>
+        // Puzzle solution: 1 = filled, 0 = empty
+        const solution = [
+            [1, 0, 1, 1, 0],
+            [1, 1, 0, 1, 1],
+            [0, 1, 1, 1, 0],
+            [1, 1, 0, 1, 1],
+            [0, 1, 1, 1, 0]
+        ];
+
+        const nonogram = document.getElementById('nonogram');
+
+        // Generate grid
+        for (let i = 0; i < solution.length; i++) {
+            for (let j = 0; j < solution[i].length; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                nonogram.appendChild(cell);
+            }
+        }
+
+        // Handle click on cells
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                cell.classList.toggle('filled');
+            });
+        });
+
+        // Check solution
+        document.getElementById('checkButton').addEventListener('click', () => {
+            let correct = true;
+
+            cells.forEach(cell => {
+                const row = cell.dataset.row;
+                const col = cell.dataset.col;
+                const isFilled = cell.classList.contains('filled');
+                const shouldBeFilled = solution[row][col] === 1;
+
+                if (isFilled !== shouldBeFilled) {
+                    correct = false;
+                }
+            });
+
+            if (correct) {
+                alert("🎉 Congratulations! You solved the Nonogram!");
+            } else {
+                alert("❌ Not correct. Try again!");
+            }
+        });
+    </script>
+</body>
+</html>
